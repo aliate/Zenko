@@ -99,3 +99,46 @@ for more examples and explanations on lifecycle rules.
 
 Once the lifecycle rules on the bucket are set, the rules apply to all
 objects in the specified bucket.
+
+.. _Lifecycle Queries:
+
+Querying Lifecycle Events
+-------------------------
+
+A lifecycle metrics feature is not available for release 1.1. The only
+available lifecycle event metric is to send a head-object request to
+Zenko's CloudServer S3 API.
+
+Querying the CloudServer requires an active kubectl session with the
+Zenko controller and S3 API functionality configured as described in
+:ref:`S3 API config`. Once this is configured, use the head-object command
+as described in
+https://docs.aws.amazon.com/cli/latest/reference/s3api/head-object.html.
+
+For example:
+
+.. code::
+   
+   $ aws s3api head-object --bucket mybucket-1 --key myobjects1 --endpoint http://10.0.0.1
+
+returns:
+
+.. code::
+
+   {
+      "AcceptRanges": "bytes",
+      "ContentType": "application/octet-stream",
+      "LastModified": "Tue, 16 Apr 2019 22:12:33 GMT",
+      "ContentLength": 1,
+      "ETag": "\"e358efa489f58062f10dd7316b65649e\"",
+      "StorageClass": "aws-backend",
+      "Metadata": {}
+   }
+
+The returned information describes the myobjects1 object in the mybucket-1 
+bucket. The StorageClass information indicates the object has transitioned to
+the aws-backend storage class (as a cloud service is defined in Zenko's
+interpretation of the S3 protocol).
+
+After an expiration event, the object is deleted, and no metadata can be
+queried. The object metadata is not found. 
