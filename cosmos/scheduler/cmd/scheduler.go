@@ -233,7 +233,7 @@ func (s *Scheduler) CreateCosmosFromLocation(location *pensieve.Location, bucket
 	nfs := pensieve.NewNFSLocation(location.Details.Endpoint)
 	_, err := s.KubeAlpha.Cosmoses(s.Namespace).Create(&v1alpha1.Cosmos{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: location.Name,
+			Name: location.Name+"-"+bucket,
 		},
 		Spec: v1alpha1.CosmosSpec{
 			FullnameOverride: location.Name,
